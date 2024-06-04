@@ -10,6 +10,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.time.LocalDate;
+
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,4 +27,5 @@ public class TodoEntity {
 	private String userId;
 	private String title;
 	private boolean done;
+	private LocalDate date; // 날짜 필드 추가
 }
