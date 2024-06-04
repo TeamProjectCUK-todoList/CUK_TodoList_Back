@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class TodoApplication {
-//Commit test
+
 	public static void main(String[] args) {
 		SpringApplication.run(TodoApplication.class, args);
 	}
