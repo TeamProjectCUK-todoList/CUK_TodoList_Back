@@ -2,6 +2,7 @@ package com.example.todo.controller;
 
 import com.example.todo.dto.ResponseDTO;
 import com.example.todo.dto.EventDTO;
+import com.example.todo.dto.TodoDTO;
 import com.example.todo.model.EventEntity;
 import com.example.todo.service.EventService;
 import lombok.extern.slf4j.Slf4j;
@@ -98,6 +99,19 @@ public class EventController {
 
             ResponseDTO<EventDTO> response = ResponseDTO.<EventDTO>builder().data(dtos).build();
             return ResponseEntity.ok().body(response);
+        } catch (Exception e) {
+            String error = e.getMessage();
+            ResponseDTO<EventDTO> response = ResponseDTO.<EventDTO>builder().error(error).build();
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
+
+    // 날짜별 일괄 삭제
+    @DeleteMapping("/date/{date}")
+    public ResponseEntity<?> deleteEventsByDate(@AuthenticationPrincipal String userId, @PathVariable("date") LocalDate date) {
+        try {
+            service.deleteByDate(userId, date);
+            return ResponseEntity.ok().body("Events deleted successfully for date: " + date);
         } catch (Exception e) {
             String error = e.getMessage();
             ResponseDTO<EventDTO> response = ResponseDTO.<EventDTO>builder().error(error).build();

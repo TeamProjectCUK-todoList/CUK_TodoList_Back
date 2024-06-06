@@ -50,6 +50,11 @@ public class TodoService {
         }
         return repository.findByUserId(entity.getUserId());
     }
+    // 날짜별 일괄 삭제
+    public void deleteByDate(final String userId, final LocalDate date) {
+        List<TodoEntity> todos = repository.findByUserIdAndDate(userId, date);
+        repository.deleteAll(todos);
+    }
 
     public void validate(final TodoEntity entity) {
         if (entity == null) {
