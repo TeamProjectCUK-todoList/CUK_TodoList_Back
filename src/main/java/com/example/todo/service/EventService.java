@@ -1,6 +1,7 @@
 package com.example.todo.service;
 
 import com.example.todo.model.EventEntity;
+import com.example.todo.model.TodoEntity;
 import com.example.todo.persistence.EventRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,12 @@ public class EventService {
             throw new RuntimeException("id does not exist");
         }
         return repository.findByUserId(entity.getUserId());
+    }
+
+    // 날짜별 일괄 삭제
+    public void deleteByDate(final String userId, final LocalDate date) {
+        List<EventEntity> events = repository.findByUserIdAndDate(userId, date);
+        repository.deleteAll(events);
     }
 
     public void validate(final EventEntity entity) {
