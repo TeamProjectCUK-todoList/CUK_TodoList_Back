@@ -104,4 +104,17 @@ public class TodoController {
             return ResponseEntity.badRequest().body(response);
         }
     }
+
+    // 날짜별 일괄 삭제
+    @DeleteMapping("/date/{date}")
+    public ResponseEntity<?> deleteTodosByDate(@AuthenticationPrincipal String userId, @PathVariable("date") LocalDate date) {
+        try {
+            service.deleteByDate(userId, date);
+            return ResponseEntity.ok().body("Todos deleted successfully for date: " + date);
+        } catch (Exception e) {
+            String error = e.getMessage();
+            ResponseDTO<TodoDTO> response = ResponseDTO.<TodoDTO>builder().error(error).build();
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
 }
