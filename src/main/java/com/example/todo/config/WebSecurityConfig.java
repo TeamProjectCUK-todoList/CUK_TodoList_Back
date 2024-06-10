@@ -31,6 +31,7 @@ import org.springframework.web.cors.CorsConfiguration;
 @Configuration
 @EnableMethodSecurity
 @EnableWebSecurity
+@Slf4j
 public class WebSecurityConfig {
 
     private final ObjectMapper objectMapper;
@@ -56,7 +57,8 @@ public class WebSecurityConfig {
                         .requestMatchers(
                                 new AntPathRequestMatcher("/"),
                                 new AntPathRequestMatcher("/auth/**"),
-                                new AntPathRequestMatcher("/h2-console/**"))
+                                new AntPathRequestMatcher("/h2-console/**"),
+                            new AntPathRequestMatcher("/api/v1/oauth2/google"))
                         .permitAll();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -78,8 +80,6 @@ public class WebSecurityConfig {
 
         http.addFilterBefore(jwtAuthenticationFilter,
                 UsernamePasswordAuthenticationFilter.class);
-        http.addFilterBefore(jwtAuthenticationFilter,
-                UsernamePasswordAuthenticationFilter.class);
         http.addFilterAfter(jwtAuthenticationFilter, CorsFilter.class);
 
         http.authorizeHttpRequests(request -> request.anyRequest().authenticated());
@@ -89,11 +89,10 @@ public class WebSecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         final long MAX_AGE_SECS = 3600;
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
         config.addAllowedOriginPattern("http://localhost:3000");
-        //config.addAllowedOriginPattern("*");
         config.addAllowedHeader("*");
         config.addAllowedMethod("GET");
         config.addAllowedMethod("POST");
@@ -101,6 +100,8 @@ public class WebSecurityConfig {
         config.addAllowedMethod("DELETE");
         config.addAllowedMethod("OPTIONS");
         config.setMaxAge(MAX_AGE_SECS);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return source;
     }
