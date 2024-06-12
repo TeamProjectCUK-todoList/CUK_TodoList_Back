@@ -1,9 +1,13 @@
 package com.example.todo.controller;
 
+import com.example.todo.dto.UserDTO;
 import com.example.todo.googleDTO.GoogleInfResponse;
 import com.example.todo.googleDTO.GoogleRequest;
 import com.example.todo.googleDTO.GoogleResponse;
+import com.example.todo.model.UserEntity;
 import com.example.todo.properties.GoogleClientProperties;
+import com.example.todo.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,12 +19,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-public class GoogleLoginController {
+public class GoogleUserController {
 
     private final GoogleClientProperties googleClientProperties;
+    private final UserService userService; //
 
-    public GoogleLoginController(GoogleClientProperties googleClientProperties) {
+    @Autowired
+    public GoogleUserController(GoogleClientProperties googleClientProperties, UserService userService) {
         this.googleClientProperties = googleClientProperties;
+        this.userService = userService; //
     }
 
     @RequestMapping(value = "/api/v1/oauth2/google", method = RequestMethod.POST)
@@ -33,7 +40,7 @@ public class GoogleLoginController {
     }
 
     @RequestMapping(value="/api/v1/oauth2/google/callback", method = RequestMethod.GET)
-    public String loginGoogle(@RequestParam(value = "code") String authCode){
+    public ResponseEntity<?> loginGoogle(@RequestParam(value = "code") String authCode){
         RestTemplate restTemplate = new RestTemplate();
         GoogleRequest googleOAuthRequestParam = GoogleRequest
                 .builder()
@@ -44,12 +51,27 @@ public class GoogleLoginController {
                 .grantType("authorization_code").build();
         ResponseEntity<GoogleResponse> resultEntity = restTemplate.postForEntity("https://oauth2.googleapis.com/token",
                 googleOAuthRequestParam, GoogleResponse.class);
+
         String jwtToken=resultEntity.getBody().getId_token();
+
         Map<String, String> map=new HashMap<>();
         map.put("id_token",jwtToken);
         ResponseEntity<GoogleInfResponse> resultEntity2 = restTemplate.postForEntity("https://oauth2.googleapis.com/tokeninfo",
                 map, GoogleInfResponse.class);
-        String email=resultEntity2.getBody().getEmail();
-        return email;
+
+        String email = resultEntity2.getBody().getEmail();
+        String name = resultEntity2.getBody().getName();
+
+        // 사용자 정보 저장
+        UserEntity user = userService.saveOrUpdateGoogleUser(email, name);
+
+        // 응답 객체 생성
+        final UserDTO responseUserDTO = UserDTO.builder()
+                .email(user.getEmail())
+                .id(user.getId())
+                .token(jwtToken) // 구글에서 받은 JWT 토큰을 그대로 사용
+                .build();
+
+        return ResponseEntity.ok().body(responseUserDTO);
     }
 }
