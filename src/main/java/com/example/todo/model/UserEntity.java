@@ -7,14 +7,10 @@ package com.example.todo.model;
 //import javax.persistence.Table;
 //import javax.persistence.UniqueConstraint;
 
+import com.example.todo.provider.AuthProvider;
+import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,6 +23,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = "email")})
 public class UserEntity {
+
 	@Id
 	@GeneratedValue(generator="system-uuid")
 	@GenericGenerator(name="system-uuid",strategy="uuid")
@@ -40,5 +37,9 @@ public class UserEntity {
 
 	@Column(nullable=false)
 	private String password;
+
+	@Enumerated(EnumType.STRING)
+	@Column(nullable=false)
+	private AuthProvider provider;
 
 }
