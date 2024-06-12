@@ -58,8 +58,11 @@ public class WebSecurityConfig {
                                 new AntPathRequestMatcher("/"),
                                 new AntPathRequestMatcher("/auth/**"),
                                 new AntPathRequestMatcher("/h2-console/**"),
-                            new AntPathRequestMatcher("/api/v1/oauth2/google"))
-                        .permitAll();
+                                new AntPathRequestMatcher("/api/v1/oauth2/google"),
+                                new AntPathRequestMatcher("/api/v1/oauth2/google/callback"))
+                        .permitAll()
+                        .anyRequest()
+                        .authenticated();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -82,7 +85,7 @@ public class WebSecurityConfig {
                 UsernamePasswordAuthenticationFilter.class);
         http.addFilterAfter(jwtAuthenticationFilter, CorsFilter.class);
 
-        http.authorizeHttpRequests(request -> request.anyRequest().authenticated());
+        // http.authorizeHttpRequests(request -> request.anyRequest().authenticated());
 
         return http.build();
     }
@@ -93,6 +96,7 @@ public class WebSecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
         config.addAllowedOriginPattern("http://localhost:3000");
+        config.addAllowedOriginPattern("http://localhost:8080");
         config.addAllowedHeader("*");
         config.addAllowedMethod("GET");
         config.addAllowedMethod("POST");
