@@ -25,6 +25,7 @@ public class TokenProvider {
                 .setIssuer("todo app")
                 .setIssuedAt(new Date())
                 .setExpiration(expireDate)
+                .claim("provider", userEntity.getProvider().toString()) // Provider 정보 추가
                 .compact();
     }
 

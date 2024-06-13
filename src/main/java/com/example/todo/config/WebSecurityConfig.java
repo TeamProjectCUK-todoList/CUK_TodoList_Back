@@ -59,7 +59,8 @@ public class WebSecurityConfig {
                                 new AntPathRequestMatcher("/auth/**"),
                                 new AntPathRequestMatcher("/h2-console/**"),
                                 new AntPathRequestMatcher("/api/v1/oauth2/google"),
-                                new AntPathRequestMatcher("/api/v1/oauth2/google/callback"))
+                                new AntPathRequestMatcher("/api/v1/oauth2/google/callback"),
+                                new AntPathRequestMatcher("/api/validGoogleToken"))
                         .permitAll()
                         .anyRequest()
                         .authenticated();
@@ -96,7 +97,6 @@ public class WebSecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
         config.addAllowedOriginPattern("http://localhost:3000");
-        config.addAllowedOriginPattern("http://localhost:8080");
         config.addAllowedHeader("*");
         config.addAllowedMethod("GET");
         config.addAllowedMethod("POST");

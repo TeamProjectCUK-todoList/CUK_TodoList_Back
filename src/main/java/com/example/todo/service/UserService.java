@@ -35,28 +35,49 @@ public class UserService {
     }
 
     // 로그인 시 확인 코드
-    public UserEntity getByCredentials(final String email, final String password, final PasswordEncoder encoder) {
+    public UserEntity getByCredentials(final String email, final String password, final PasswordEncoder encoder, AuthProvider provider) {
         final UserEntity originalUser = userRepository.findByEmail(email);
 
-        if (originalUser != null && encoder.matches(password, originalUser.getPassword())) {
+        // getByCredentials : 진행상황보고 코드 //
+        System.out.println(originalUser.getEmail());
+        ////////////////////////////////////
+
+        if (originalUser != null && provider == AuthProvider.LOCAL && encoder.matches(password, originalUser.getPassword())) {
+            return originalUser;
+        }
+        else if (originalUser != null && provider == AuthProvider.GOOGLE) {
+            System.out.println("구글 유저 반환");
             return originalUser;
         }
         return null;
     }
 
-    public UserEntity saveOrUpdateGoogleUser(String email, String name) {
-        UserEntity user = userRepository.findByEmail(email);
+    public UserEntity saveOrUpdateGoogleUser(String googleEmail, String name) {
+        UserEntity user = userRepository.findByEmail(googleEmail);
         if (user == null) {
+            System.out.println("no user");
             user = UserEntity.builder()
-                    .email(email)
+                    .email(googleEmail)
                     .username(name)
                     .password("") // 구글 로그인 사용자는 비밀번호가 없으므로 빈 문자열
                     .provider(AuthProvider.GOOGLE)
                     .build();
-        } else { // 구글 닉네임이 바꼈을 경우 사용자 이름 업데이트
+
+            System.out.println("Saving new Google user!");
+            return userRepository.save(user);
+
+        } else if (user.getUsername() != name){ // 구글 닉네임이 바꼈을 경우 사용자 이름 업데이트
+            System.out.println("Updating user name.");
             user.setUsername(name);
             user.setProvider(AuthProvider.GOOGLE);
+
+            System.out.println("Saving updated user.");
+            userRepository.save(user);
+
+            return user;
+
+        } else {
+            return null;
         }
-        return userRepository.save(user);
     }
 }
