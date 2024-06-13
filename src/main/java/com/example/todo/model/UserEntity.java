@@ -42,4 +42,7 @@ public class UserEntity {
 	@Column(nullable=false)
 	private AuthProvider provider;
 
+	@Column
+	private String token;
+
 }

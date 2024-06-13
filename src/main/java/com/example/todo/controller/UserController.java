@@ -3,6 +3,7 @@ package com.example.todo.controller;
 import com.example.todo.dto.ResponseDTO;
 import com.example.todo.dto.UserDTO;
 import com.example.todo.model.UserEntity;
+import com.example.todo.provider.AuthProvider;
 import com.example.todo.security.TokenProvider;
 import com.example.todo.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 //@CrossOrigin(origins = "*")   //이 새끼 있으면 망망ㅁ아
 @Slf4j
@@ -32,6 +35,7 @@ public class UserController {
                     .email(userDTO.getEmail())
                     .username(userDTO.getUsername())
                     .password(passwordEncoder.encode(userDTO.getPassword()))
+                    .provider(AuthProvider.LOCAL)
                     .build();
 
             UserEntity registeredUser = userService.create(user);
@@ -39,6 +43,7 @@ public class UserController {
                     .email(registeredUser.getEmail())
                     .id(registeredUser.getId())
                     .username(registeredUser.getUsername())
+                    .provider(registeredUser.getProvider())
                     .build();
             return ResponseEntity.ok().body(responseUserDTO);
         }catch(Exception e){
@@ -50,7 +55,7 @@ public class UserController {
 
     @PostMapping("/signin")///signin
     public ResponseEntity<?>authenticate(@RequestBody UserDTO userDTO){
-        UserEntity user = userService.getByCredentials(userDTO.getEmail(),userDTO.getPassword(),passwordEncoder);
+        UserEntity user = userService.getByCredentials(userDTO.getEmail(),userDTO.getPassword(),passwordEncoder, userDTO.getProvider());
 
         if(user != null){
             final String token = tokenProvider.create(user);
@@ -58,6 +63,7 @@ public class UserController {
                     .email(user.getEmail())
                     .id(user.getId())
                     .token(token)
+                    .provider(AuthProvider.LOCAL) // 추가
                     .build();
             return ResponseEntity.ok().body(responseUserDTO);
         }
