@@ -60,7 +60,8 @@ public class WebSecurityConfig {
                                 new AntPathRequestMatcher("/h2-console/**"),
                                 new AntPathRequestMatcher("/api/v1/oauth2/google"),
                                 new AntPathRequestMatcher("/api/v1/oauth2/google/callback"),
-                                new AntPathRequestMatcher("/api/validGoogleToken"))
+                                new AntPathRequestMatcher("/api/validGoogleToken"),
+                                new AntPathRequestMatcher("/user/myProvider"))
                         .permitAll()
                         .anyRequest()
                         .authenticated();
