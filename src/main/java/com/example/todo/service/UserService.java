@@ -39,7 +39,7 @@ public class UserService {
         final UserEntity originalUser = userRepository.findByEmail(email);
 
         // getByCredentials : 진행상황보고 코드 //
-        System.out.println(originalUser.getEmail());
+        System.out.println("google User getByCredentials: " + originalUser.getEmail());
         ////////////////////////////////////
 
         if (originalUser != null && provider == AuthProvider.LOCAL && encoder.matches(password, originalUser.getPassword())) {

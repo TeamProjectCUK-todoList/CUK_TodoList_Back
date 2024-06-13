@@ -119,7 +119,7 @@ public class GoogleUserController {
             final String token = tokenProvider.create(user);
 
             // 진행상황 보고 코드 //
-            System.out.println("soon!");
+            System.out.println("creat google Login User Token!");
             /////////////////////
 
             final UserDTO responseUserDTO = UserDTO.builder()
