@@ -8,7 +8,7 @@ import com.example.todo.googleDTO.GoogleResponse;
 import com.example.todo.model.UserEntity;
 import com.example.todo.persistence.UserRepository;
 import com.example.todo.properties.GoogleClientProperties;
-import com.example.todo.provider.AuthProvider;
+import com.example.todo.security.AuthProvider;
 import com.example.todo.security.TokenProvider;
 import com.example.todo.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;

@@ -3,7 +3,7 @@ package com.example.todo.controller;
 import com.example.todo.dto.ResponseDTO;
 import com.example.todo.dto.UserDTO;
 import com.example.todo.model.UserEntity;
-import com.example.todo.provider.AuthProvider;
+import com.example.todo.security.AuthProvider;
 import com.example.todo.security.TokenProvider;
 import com.example.todo.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -12,8 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 //@CrossOrigin(origins = "*")   //이 새끼 있으면 망망ㅁ아
 @Slf4j

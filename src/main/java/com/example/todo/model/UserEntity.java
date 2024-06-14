@@ -7,7 +7,7 @@ package com.example.todo.model;
 //import javax.persistence.Table;
 //import javax.persistence.UniqueConstraint;
 
-import com.example.todo.provider.AuthProvider;
+import com.example.todo.security.AuthProvider;
 import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
 

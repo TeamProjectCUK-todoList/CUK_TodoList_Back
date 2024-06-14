@@ -1,6 +1,6 @@
 package com.example.todo.dto;
 
-import com.example.todo.provider.AuthProvider;
+import com.example.todo.security.AuthProvider;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
