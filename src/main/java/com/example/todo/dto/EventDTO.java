@@ -1,6 +1,6 @@
 package com.example.todo.dto;
 
-import com.example.todo.model.TodoEntity;
+import com.example.todo.model.EventEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,21 +12,21 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data   //setter getter 만들어줌
-public class TodoDTO {
+public class EventDTO {
     private String id;
     private String title;
     private boolean done;
     private LocalDate date; // 날짜 필드 추가
 
-    public TodoDTO(final TodoEntity entity) {
+    public EventDTO(final EventEntity entity) {
         this.id = entity.getId();
         this.title = entity.getTitle();
         this.done = entity.isDone();
         this.date = entity.getDate(); // 날짜 필드 추가
     }
 
-    public static TodoEntity todoEntity(final TodoDTO dto) {
-        return TodoEntity.builder()
+    public static EventEntity eventEntity(final EventDTO dto) {
+        return EventEntity.builder()
                 .id(dto.getId())
                 .title(dto.getTitle())
                 .done(dto.isDone())

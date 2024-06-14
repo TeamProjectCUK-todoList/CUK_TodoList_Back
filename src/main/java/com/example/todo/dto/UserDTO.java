@@ -1,5 +1,6 @@
 package com.example.todo.dto;
 
+import com.example.todo.security.AuthProvider;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,4 +16,5 @@ public class UserDTO {
     private String username;
     private String password;
     private String id;
+    private AuthProvider provider;  // 추가된 필드
 }

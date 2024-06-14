@@ -17,15 +17,15 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Data
 @Entity
-@Table(name="Todo")
-public class TodoEntity {
+@Table(name="Event")
+public class EventEntity {
 
-	@Id
-	@GeneratedValue(generator="system-uuid")
-	@GenericGenerator(name="system-uuid", strategy = "uuid")
-	private String id;
-	private String userId;
-	private String title;
-	private boolean done;
-	private LocalDate date; // 날짜 필드 추가
+    @Id
+    @GeneratedValue(generator="system-uuid")
+    @GenericGenerator(name="system-uuid", strategy = "uuid")
+    private String id;
+    private String userId;
+    private String title;
+    private boolean done;
+    private LocalDate date; // 날짜 필드 추가
 }
